@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Response\QrCodeResponse;
 
 
 class UserController extends Controller
@@ -40,5 +42,14 @@ class UserController extends Controller
             $em->flush();
 
             return View::create($user, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/api/qrCode", name="qrCode")
+     */
+    public function qrCode (){
+        $qrCode = new QrCode('viande jkbazbkjzabkjzbkjfzbkjzbhjkzf');
+        header('Content-Type: '.$qrCode->getContentType());
+        return new QrCodeResponse($qrCode);
     }
 }

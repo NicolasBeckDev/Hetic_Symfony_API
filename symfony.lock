@@ -1,4 +1,7 @@
 {
+    "bacon/bacon-qr-code": {
+        "version": "1.0.3"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -65,6 +68,12 @@
             "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
         }
     },
+    "endroid/installer": {
+        "version": "1.0.3"
+    },
+    "endroid/qr-code": {
+        "version": "3.2.9"
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -95,8 +104,14 @@
             "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
         }
     },
+    "khanamiryan/qrcode-detector-decoder": {
+        "version": "1"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
+    },
+    "myclabs/php-enum": {
+        "version": "1.5.2"
     },
     "nikic/php-parser": {
         "version": "v4.0.1"
