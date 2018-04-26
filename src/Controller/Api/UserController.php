@@ -13,15 +13,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Response\QrCodeResponse;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UserController extends Controller
 {
     private $userRepository;
+    private $encoder;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $encoder)
     {
         $this->userRepository = $userRepository;
+        $this->encoder = $encoder;
     }
 
     /**
@@ -29,6 +33,7 @@ class UserController extends Controller
      * @Rest\Post("/api/users", name="user_create")
      * @param Request $request
      * @return \FOS\RestBundle\View\View
+     * @throws \Exception
      */
     public function create(Request $request)
     {
@@ -36,12 +41,61 @@ class UserController extends Controller
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        $user->setPassword($this->encoder->encodePassword($user, $request->request->get('password')));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+        $user->setToken(bin2hex(random_bytes(20)));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
-            return View::create($user, Response::HTTP_CREATED);
+        return View::create($user, Response::HTTP_CREATED);
+    }
+
+    /**
+     * login User.
+     * @Rest\Post("/api/login", name="user_login")
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View
+     */
+    public function login(Request $request)
+    {
+        $user = $this->userRepository->findOneBy(['email'=> $request->request->get('email')]);
+
+        if (!$user)
+        {
+            return View::create(['invalid email'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ( !$this->encoder->isPasswordValid($user, $request->request->get('password')))
+        {
+            return View::create(['invalid password'], Response::HTTP_NOT_FOUND);
+        }
+
+        return View::create($user->getToken(), Response::HTTP_OK);
+    }
+
+    /**
+     * refresh token.
+     * @Rest\Post("/api/refreshToken", name="user_refresh_token")
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View
+     * @throws \Exception
+     */
+    public function refreshToken(Request $request)
+    {
+        $user = $this->userRepository->findOneBy(['token' => $request->request->get('token')]);
+
+        if (!$user)
+        {
+            return View::create(['invalid token'], Response::HTTP_NOT_FOUND);
+        }
+
+        $user->setToken(bin2hex(random_bytes(20)));
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        return View::create($user->getToken(), Response::HTTP_OK);
+
     }
 
     /**
