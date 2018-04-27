@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}QR Code{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="containerQrcode">
+        <div class="qrcode_block">
+            <p class="Nbsalle">{{ description }}</p>
+            <img src="{{ qr_code_data_uri(qrCode) }}" />
+            <div class="timer"><span id="time">00:30</span>s</div>
+        </div>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/QRCodeController.php'|file_link(0) }}">src/Controller/QRCodeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/qr_code/index.html.twig'|file_link(0) }}">templates/qr_code/index.html.twig</a></code></li>
-    </ul>
-</div>
+
+{% block javascripts %}
+    <script>
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10)
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.text(minutes + ":" + seconds);
+
+                if (--timer < 0) {
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        jQuery(function ($) {
+            var fiveMinutes = 60 / 2,
+                display = $('#time');
+            startTimer(fiveMinutes, display);
+        });
+    </script>
 {% endblock %}
