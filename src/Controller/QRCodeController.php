@@ -3,17 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Location;
-use App\Form\LocationType;
 use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
 use App\Repository\UserRepository;
-use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -58,7 +55,6 @@ class QRCodeController extends Controller
      */
     public function setLocation()
     {
-
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('qrcode'))
             ->setMethod('POST')
