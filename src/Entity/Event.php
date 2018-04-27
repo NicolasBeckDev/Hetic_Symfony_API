@@ -19,18 +19,18 @@ class Event
     /**
      * @ORM\Column(type="string", length=40)
      */
-    private $Name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="Events")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $Location;
+    private $name;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $Date;
+    private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $location;
 
     public function getId()
     {
@@ -39,36 +39,37 @@ class Event
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
+
+    public function getDate(): ?\DateTime
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTime $date): self
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
 
     public function getLocation(): ?Location
     {
-        return $this->Location;
+        return $this->location;
     }
 
-    public function setLocation(?Location $Location): self
+    public function setLocation(?Location $location): self
     {
-        $this->Location = $Location;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->Date;
-    }
-
-    public function setDate(\DateTimeInterface $Date): self
-    {
-        $this->Date = $Date;
+        $this->location = $location;
 
         return $this;
     }

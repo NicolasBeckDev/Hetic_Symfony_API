@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,32 +19,28 @@ class Location
     /**
      * @ORM\Column(type="integer")
      */
-    private $Beacon_min;
+    private $beaconMin;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $Beacon_max;
+    private $beaconMax;
 
     /**
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="string", length=40, nullable=true)
      */
-    private $QRCode;
+    private $qrCode;
+
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastRefresh;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $Description;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="Location")
-     */
-    private $Events;
-
-    public function __construct()
-    {
-        $this->Events = new ArrayCollection();
-    }
+    private $description;
 
     public function getId()
     {
@@ -55,79 +49,61 @@ class Location
 
     public function getBeaconMin(): ?int
     {
-        return $this->Beacon_min;
+        return $this->beaconMin;
     }
 
-    public function setBeaconMin(int $Beacon_min): self
+    public function setBeaconMin(int $beaconMin): self
     {
-        $this->Beacon_min = $Beacon_min;
+        $this->beaconMin = $beaconMin;
 
         return $this;
     }
 
     public function getBeaconMax(): ?int
     {
-        return $this->Beacon_max;
+        return $this->beaconMax;
     }
 
-    public function setBeaconMax(int $Beacon_max): self
+    public function setBeaconMax(int $beaconMax): self
     {
-        $this->Beacon_max = $Beacon_max;
+        $this->beaconMax = $beaconMax;
 
         return $this;
     }
 
-    public function getQRCode(): ?string
+    public function getQrCode(): ?string
     {
-        return $this->QRCode;
+        return $this->qrCode;
     }
 
-    public function setQRCode(string $QRCode): self
+    public function setQrCode(?string $qrCode): self
     {
-        $this->QRCode = $QRCode;
+        $this->qrCode = $qrCode;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): self
+    public function setDescription(string $description): self
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Event[]
-     */
-    public function getEvents(): Collection
+
+    public function getLastRefresh(): ?\DateTime
     {
-        return $this->Events;
+        return $this->lastRefresh;
     }
 
-    public function addEvent(Event $event): self
+    public function setLastRefresh(\DateTime $lastRefresh): self
     {
-        if (!$this->Events->contains($event)) {
-            $this->Events[] = $event;
-            $event->setLocation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $event): self
-    {
-        if ($this->Events->contains($event)) {
-            $this->Events->removeElement($event);
-            // set the owning side to null (unless already changed)
-            if ($event->getLocation() === $this) {
-                $event->setLocation(null);
-            }
-        }
+        $this->lastRefresh = $lastRefresh;
 
         return $this;
     }
