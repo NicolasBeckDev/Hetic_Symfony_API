@@ -17,14 +17,9 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", length=32)
      */
-    private $beaconMin;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $beaconMax;
+    private $beacon;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=true)
@@ -47,26 +42,14 @@ class Location
         return $this->id;
     }
 
-    public function getBeaconMin(): ?int
+    public function getBeacon(): ?int
     {
-        return $this->beaconMin;
+        return $this->beacon;
     }
 
-    public function setBeaconMin(int $beaconMin): self
+    public function setBeacon(int $beacon): self
     {
-        $this->beaconMin = $beaconMin;
-
-        return $this;
-    }
-
-    public function getBeaconMax(): ?int
-    {
-        return $this->beaconMax;
-    }
-
-    public function setBeaconMax(int $beaconMax): self
-    {
-        $this->beaconMax = $beaconMax;
+        $this->beacon = $beacon;
 
         return $this;
     }

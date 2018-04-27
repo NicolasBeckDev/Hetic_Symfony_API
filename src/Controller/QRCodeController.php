@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Location;
 use App\Form\LocationType;
 use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
@@ -10,6 +11,8 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Response\QrCodeResponse;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -31,7 +34,7 @@ class QRCodeController extends Controller
     }
 
     /**
-     * @Route("/getQRCode", name="qrCode")
+     * @Route("/getQRCode", name="qrcode")
      * @Method({"POST"})
      * @param Request $request
      * @return QrCodeResponse
@@ -39,7 +42,7 @@ class QRCodeController extends Controller
      */
     public function getQRCode (Request $request)
     {
-        $location = $this->locationRepository->findOneBy(['description' => $request->request->get('location')] );
+        $location = $this->locationRepository->find($request->request->get('form')['location']);
 
         if (!$location->getLastRefresh() || date("m/d/Y h:i:s", time()) > $location->getLastRefresh()->add(new \DateInterval('PT30S'))->format("m/d/Y h:i:s"))
         {
@@ -57,20 +60,20 @@ class QRCodeController extends Controller
     /**
      * @Route("/", name="showLocations")
      * @Method({"GET"})
-     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function setLocation(Request $request)
+    public function setLocation()
     {
-        $form = $this->createForm(LocationType::class);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            //return $this->redirectToRoute('qrCode');
-            return $this->redirect($this->generateUrl('qrCode'));
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('qrcode'))
+            ->setMethod('POST')
+            ->add('location',EntityType::class, array(
+                'class' => Location::class,
+                'choice_label' => 'description'))
+            ->add('submit', SubmitType::class)
+            ->getForm();
 
-        }
-            return $this->render('qr_code/location.html.twig',[
-            'form' => $form->createView()
-        ]);
+        return $this->render('qr_code/location.html.twig',['form' => $form->createView()]);
     }
 }
