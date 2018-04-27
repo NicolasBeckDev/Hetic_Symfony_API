@@ -102,8 +102,9 @@ class UserController extends Controller
      * @Route("/api/qrCode", name="qrCode")
      */
     public function qrCode (){
-        $qrCode = new QrCode('viande jkbazbkjzabkjzbkjfzbkjzbhjkzf');
+        $qrCode = new QrCode('Salle 2');
         header('Content-Type: '.$qrCode->getContentType());
+
         return new QrCodeResponse($qrCode);
     }
 }
