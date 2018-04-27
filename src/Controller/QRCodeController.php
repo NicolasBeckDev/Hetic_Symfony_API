@@ -51,7 +51,11 @@ class QRCodeController extends Controller
         $qrCode = new QrCode($location->getQrCode());
         header('Content-Type: '.$qrCode->getContentType());
 
-        return new QrCodeResponse($qrCode);
+        return $this->render('qr_code/index.html.twig');
+//        return $this->render('qr_code/location.html.twig',[
+//            'qrCode' => new QrCodeResponse($qrCode)
+//        ]);
+        //return new QrCodeResponse($qrCode);
     }
 
     /**
@@ -73,4 +77,6 @@ class QRCodeController extends Controller
             'form' => $form->createView()
         ]);
     }
+
+
 }
