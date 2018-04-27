@@ -63,7 +63,7 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $user = $this->userRepository->findOneBy(['email'=> $request->request->get('email')]);
+        $user = $this->userRepository->findOneBy(['email'=> $request->request->get('Email')]);
 
         if (!$user)
         {
@@ -71,12 +71,12 @@ class UserController extends Controller
         }
 
 //        if ( !$this->encoder->isPasswordValid($user, $request->request->get('password')))
-        if ( $user->getPassword() !== $request->request->get('password'))
+        if ( $user->getPassword() !== $request->request->get('Password'))
         {
             return View::create(['invalid password'], Response::HTTP_NOT_FOUND);
         }
 
-        return View::create($user->getToken(), Response::HTTP_OK);
+        return View::create(['token' => $user->getToken()], Response::HTTP_OK);
     }
 
     /**
@@ -99,7 +99,7 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->flush();
 
-        return View::create($user->getToken(), Response::HTTP_OK);
+        return View::create(['token' => $user->getToken()], Response::HTTP_OK);
     }
 
     /**
