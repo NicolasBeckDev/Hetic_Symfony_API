@@ -34,17 +34,20 @@ class QRCodeController extends Controller
      * @Method({"POST"})
      * @param Request $request
      * @return QrCodeResponse
+     * @throws \Exception
      */
     public function getQRCode (Request $request)
     {
         $location = $this->locationRepository->findOneBy(['description' => $request->request->get('location')] );
 
-        if ($location->getLastRefresh() or time() > $location->getLastRefresh() + 30 )
+        if (!$location->getLastRefresh() || date("m/d/Y h:i:s", time()) > $location->getLastRefresh()->add(new \DateInterval('PT30S'))->format("m/d/Y h:i:s"))
         {
-
+            $location->setLastRefresh(new \DateTime());
+            $location->setQrCode(bin2hex(random_bytes(20)));
+            $this->getDoctrine()->getManager()->flush();
         }
 
-        $qrCode = new QrCode($location);
+        $qrCode = new QrCode($location->getQrCode());
         header('Content-Type: '.$qrCode->getContentType());
 
         return new QrCodeResponse($qrCode);
