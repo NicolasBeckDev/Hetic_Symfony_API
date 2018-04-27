@@ -27,7 +27,7 @@ class Event
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="events")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location")
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
