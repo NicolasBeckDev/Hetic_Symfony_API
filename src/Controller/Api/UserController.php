@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Sign;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\EventRepository;
@@ -99,7 +100,6 @@ class UserController extends Controller
         $em->flush();
 
         return View::create($user->getToken(), Response::HTTP_OK);
-
     }
 
     /**
@@ -119,6 +119,60 @@ class UserController extends Controller
         }
 
         return View::create(['date' => $nextEvent->getDate()->format(\DateTime::ISO8601), 'location' => $nextEvent->getLocation()->getDescription()], Response::HTTP_OK);
+
+    }
+
+
+    /**
+     * check in.
+     * @Rest\Post("/api/checkIn", name="checkIn")
+     * @param Request $request
+     * @return \FOS\RestBundle\View\View
+     * @throws \Exception
+     */
+    public function checkIn(Request $request)
+    {
+        $location = $this->locationRepository->findOneBy(['qrCode' => $request->request->get('QRCodeData')]);
+
+        if(!$location)
+        {
+            return View::create(['response' => 'KO'], Response::HTTP_NOT_FOUND);
+        }
+
+        $date = $request->request->get('date');
+        if (!$date){
+            return View::create(['response' => 'KO'], Response::HTTP_NOT_FOUND);
+        }
+
+        $beaconCollection = str_replace('[','', $request->request->get('beaconCollection'));
+        $beaconCollection = str_replace(']','', $beaconCollection);
+        $beaconCollection = explode(',', $beaconCollection);
+        if (!in_array($location->getBeacon(), $beaconCollection))
+        {
+            return View::create(['response' => 'KO'], Response::HTTP_NOT_FOUND);
+        }
+
+        $user = $this->userRepository->findOneBy(['token' => $request->request->get('token')]);
+        if (!$user)
+        {
+            return View::create(['response' => 'KO'], Response::HTTP_NOT_FOUND);
+        }
+
+        $event = $this->eventRepository->findNextEvent();
+        if (!$event)
+        {
+            return View::create(['response' => 'KO'], Response::HTTP_NOT_FOUND);
+        }
+
+        $sign = new Sign();
+        $sign->setDate(new \DateTime($date));
+        $sign->setEvent($event);
+        $sign->setUser($user);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($sign);
+        $em->flush();
+
+        return View::create(['response' => 'OK'], Response::HTTP_OK);
 
     }
 

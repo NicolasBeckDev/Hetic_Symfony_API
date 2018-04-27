@@ -44,12 +44,8 @@ class QRCodeController extends Controller
     {
         $location = $this->locationRepository->find($request->request->get('form')['location']);
 
-        if (!$location->getLastRefresh() || date("m/d/Y h:i:s", time()) > $location->getLastRefresh()->add(new \DateInterval('PT30S'))->format("m/d/Y h:i:s"))
-        {
-            $location->setLastRefresh(new \DateTime());
-            $location->setQrCode(bin2hex(random_bytes(20)));
-            $this->getDoctrine()->getManager()->flush();
-        }
+        $location->setQrCode(bin2hex(random_bytes(20)));
+        $this->getDoctrine()->getManager()->flush();
 
         $qrCode = new QrCode($location->getQrCode());
         header('Content-Type: '.$qrCode->getContentType());

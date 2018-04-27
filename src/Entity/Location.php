@@ -17,7 +17,7 @@ class Location
     private $id;
 
     /**
-     * @ORM\Column(type="integer", length=32)
+     * @ORM\Column(type="bigint")
      */
     private $beacon;
 
@@ -25,12 +25,6 @@ class Location
      * @ORM\Column(type="string", length=40, nullable=true)
      */
     private $qrCode;
-
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $lastRefresh;
 
     /**
      * @ORM\Column(type="text")
@@ -74,19 +68,6 @@ class Location
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-
-    public function getLastRefresh(): ?\DateTime
-    {
-        return $this->lastRefresh;
-    }
-
-    public function setLastRefresh(\DateTime $lastRefresh): self
-    {
-        $this->lastRefresh = $lastRefresh;
 
         return $this;
     }
