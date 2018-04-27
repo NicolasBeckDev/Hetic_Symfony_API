@@ -4,6 +4,8 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\EventRepository;
+use App\Repository\LocationRepository;
 use App\Repository\UserRepository;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,20 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Response\QrCodeResponse;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UserController extends Controller
 {
     private $userRepository;
+    private $locationRepository;
+    private $eventRepository;
     private $encoder;
 
-    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $encoder)
+    public function __construct(UserRepository $userRepository, LocationRepository $locationRepository, EventRepository $eventRepository, UserPasswordEncoderInterface $encoder)
     {
         $this->userRepository = $userRepository;
+        $this->locationRepository = $locationRepository;
+        $this->eventRepository = $eventRepository;
         $this->encoder = $encoder;
     }
 
@@ -66,7 +69,8 @@ class UserController extends Controller
             return View::create(['invalid email'], Response::HTTP_NOT_FOUND);
         }
 
-        if ( !$this->encoder->isPasswordValid($user, $request->request->get('password')))
+//        if ( !$this->encoder->isPasswordValid($user, $request->request->get('password')))
+        if ( $user->getPassword() !== $request->request->get('password'))
         {
             return View::create(['invalid password'], Response::HTTP_NOT_FOUND);
         }
@@ -99,11 +103,22 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/api/qrCode", name="qrCode")
+     * get location.
+     * @Rest\Get("/api/getLocation/{token}", name="user_get_location")
+     * @param string $token
+     * @return \FOS\RestBundle\View\View
      */
-    public function qrCode (){
-        $qrCode = new QrCode('viande jkbazbkjzabkjzbkjfzbkjzbhjkzf');
-        header('Content-Type: '.$qrCode->getContentType());
-        return new QrCodeResponse($qrCode);
+    public function getLocation(string $token)
+    {
+        $nextEvent = $this->eventRepository->findNextEvent();
+
+        if (!$nextEvent)
+        {
+            return View::create(['no location'], Response::HTTP_NOT_FOUND);
+        }
+
+        return View::create(['date' => $nextEvent->getDate()->format(\DateTime::ISO8601), 'location' => $nextEvent->getLocation()->getDescription()], Response::HTTP_OK);
+
     }
+
 }
