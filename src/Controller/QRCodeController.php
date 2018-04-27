@@ -7,8 +7,6 @@ use App\Form\LocationType;
 use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
 use App\Repository\UserRepository;
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Response\QrCodeResponse;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -37,7 +35,7 @@ class QRCodeController extends Controller
      * @Route("/getQRCode", name="qrcode")
      * @Method({"POST"})
      * @param Request $request
-     * @return QrCodeResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
     public function getQRCode (Request $request)
@@ -51,14 +49,10 @@ class QRCodeController extends Controller
             $this->getDoctrine()->getManager()->flush();
         }
 
-        $qrCode = new QrCode($location->getQrCode());
-        header('Content-Type: '.$qrCode->getContentType());
-
-        return $this->render('qr_code/index.html.twig');
-//        return $this->render('qr_code/location.html.twig',[
-//            'qrCode' => new QrCodeResponse($qrCode)
-//        ]);
-        //return new QrCodeResponse($qrCode);
+        return $this->render('qr_code/index.html.twig',[
+            'qrCode' => $location->getQrCode(),
+            'description' => $location->getDescription()
+        ]);
     }
 
     /**

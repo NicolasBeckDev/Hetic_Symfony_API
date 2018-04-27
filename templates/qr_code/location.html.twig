@@ -1,3 +1,20 @@
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire{% endblock %}
+
+{% block body %}
+    <div class="containerQrcode">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('select').niceSelect();
+        });
+    </script>
+{% endblock %}

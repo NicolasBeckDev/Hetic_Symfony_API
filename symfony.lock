@@ -74,6 +74,15 @@
     "endroid/qr-code": {
         "version": "3.2.9"
     },
+    "endroid/qr-code-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "b9fcbe18b537c63bf61d3c3be8116a00a85c8e2e"
+        }
+    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -157,6 +166,9 @@
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
+    },
+    "symfony/asset": {
+        "version": "v4.0.8"
     },
     "symfony/cache": {
         "version": "v4.0.8"

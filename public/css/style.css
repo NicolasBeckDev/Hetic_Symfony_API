@@ -1,0 +1,130 @@
+html, body {width:100%;height:100%;margin:0;}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-o-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+
+body{
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    background: linear-gradient(230deg,#a24bcf,#4b79cf,#4bc5cf);
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    -o-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
+}
+.containerQrcode{
+    width: 100%;
+    height: 100vh;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: -ms-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -moz-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-justify-content:center;
+    -moz-justify-content:center;
+    -ms-justify-content:center;
+    justify-content:center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.containerQrcode .qrcode_block{
+    width: 100%;
+    text-align: center;
+}
+.containerQrcode .qrcode_block img  {
+    max-width: 100%;
+    margin: 2em 0;
+}
+
+.containerQrcode .qrcode_block .timer, .containerQrcode .qrcode_block .Nbsalle{
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+    margin: 0;
+}
+
+form{
+    border-radius: 10px;
+    padding: 30px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height:50%;
+    background-color: #ffffff;
+    width: 300px;
+    color: #272727;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: -ms-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    -moz-flex-flow: row wrap;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    -webkit-justify-content:center;
+    -moz-justify-content:center;
+    -ms-justify-content:center;
+    justify-content:center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+form #form{
+    width: 100%;
+}
+#form div > *{
+    width: 100%;
+}
+
+#form label{
+    display: block;
+    text-align: center;
+    font-size:3em;
+    font-weight: bold;
+}
+#form .nice-select{
+    margin: 30px 0;
+}
+#form .nice-select .list{
+    max-height: 300px;
+}
+#form #form_submit{
+    padding: 20px;
+    border: 0px;
+    background-color: #272727;
+    color: #ffff;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
