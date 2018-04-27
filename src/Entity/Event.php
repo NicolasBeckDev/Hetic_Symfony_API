@@ -32,6 +32,7 @@ class Event
      */
     private $location;
 
+
     public function getId()
     {
         return $this->id;
