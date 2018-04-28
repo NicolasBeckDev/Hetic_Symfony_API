@@ -3,6 +3,7 @@
 {% block title %}QR Code{% endblock %}
 
 {% block body %}
+    <a href="{{path('showLocations')}}" class="retourHome">Retour</a>
     <div class="containerQrcode">
         <div class="qrcode_block">
             <p class="Nbsalle">{{ description }}</p>
@@ -10,7 +11,6 @@
             <div class="timer"><span id="time">00:30</span>s</div>
         </div>
     </div>
-
 {% endblock %}
 
 

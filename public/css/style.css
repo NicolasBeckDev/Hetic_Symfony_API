@@ -33,6 +33,10 @@ body{
     -o-animation: AnimationName 30s ease infinite;
     animation: AnimationName 30s ease infinite;
 }
+
+/*******************************************
+************** QRCODE PAGE *****************
+********************************************/
 .containerQrcode{
     width: 100%;
     height: 100vh;
@@ -71,7 +75,30 @@ body{
     margin: 0;
 }
 
+
+/*******************************************
+************ HOMEPAGE FORM *****************
+********************************************/
+
+.retourHome{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    padding: 15px 25px;
+    border: 0px;
+    background-color: #ffffff;
+    color: #272727;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    outline:0;
+}
+
 form{
+    -webkit-box-shadow: 0 4px 6px 0  hsla(0,0%,0%,0.2);
+    -moz-box-shadow: 0 4px 6px 0  hsla(0,0%,0%,0.2);
+    box-shadow:0 4px 6px 0  hsla(0,0%,0%,0.2);
     border-radius: 10px;
     padding: 30px;
     -webkit-box-sizing: border-box;
@@ -120,11 +147,27 @@ form #form{
     max-height: 300px;
 }
 #form #form_submit{
+    font-size: 14px;
     padding: 20px;
     border: 0px;
-    background-color: #272727;
+    background: #272727;
     color: #ffff;
     border-radius: 10px;
     font-weight: bold;
+    cursor: pointer;
+    outline:0;
+}
+
+#form #form_submit:hover{
+    color: #ffffff;
+    background: linear-gradient(230deg,#a24bcf,#4b79cf,#4bc5cf);
+    background-size: 800% 800%;
+    -webkit-animation: AnimationName 30s ease infinite;
+    -moz-animation: AnimationName 30s ease infinite;
+    -o-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
+}
+#form #form_submit:focus{
+    outline:0;
 }
 
