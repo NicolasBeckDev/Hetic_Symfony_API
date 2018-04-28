@@ -19,32 +19,19 @@ class SignRepository extends ServiceEntityRepository
         parent::__construct($registry, Sign::class);
     }
 
-//    /**
-//     * @return Sign[] Returns an array of Sign objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function getAveragesDelays()
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $conn = $this->getEntityManager()->getConnection();
 
-    /*
-    public function findOneBySomeField($value): ?Sign
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $sql = '
+        SELECT  
+        FROM product p
+        WHERE p.price > :price
+        ORDER BY p.price ASC
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['price' => 1000]);
+
+        return $qb->execute()[0];
     }
-    */
 }

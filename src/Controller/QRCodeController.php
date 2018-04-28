@@ -37,11 +37,16 @@ class QRCodeController extends Controller
      */
     public function getQRCode (Request $request)
     {
+        //Get location by location description
         $location = $this->locationRepository->find($request->request->get('form')['location']);
 
+        //Set random chars in QRCode attribute
         $location->setQrCode(bin2hex(random_bytes(20)));
+
+        //Flush edited location
         $this->getDoctrine()->getManager()->flush();
 
+        //Return a view with QRCode value and description value
         return $this->render('qr_code/index.html.twig',[
             'qrCode' => $location->getQrCode(),
             'description' => $location->getDescription()
@@ -49,12 +54,14 @@ class QRCodeController extends Controller
     }
 
     /**
+     * Vue with form where you can select a location
      * @Route("/", name="showLocations")
      * @Method({"GET"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function setLocation()
     {
+        //Create the form => content list of content description and redirect to qrcode route
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('qrcode'))
             ->setMethod('POST')
@@ -64,6 +71,7 @@ class QRCodeController extends Controller
             ->add('submit', SubmitType::class)
             ->getForm();
 
+        //Return the vue with the form
         return $this->render('qr_code/location.html.twig',['form' => $form->createView()]);
     }
 

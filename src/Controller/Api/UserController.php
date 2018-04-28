@@ -37,7 +37,7 @@ class UserController extends Controller
     }
 
     /**
-     * Create User.
+     * Create User with hashed password and random token
      * @Rest\Post("/api/users", name="user_create")
      * @param Request $request
      * @return \FOS\RestBundle\View\View
@@ -58,21 +58,21 @@ class UserController extends Controller
     }
 
     /**
-     * login User.
+     * Return user token by email and password.
      * @Rest\Post("/api/login", name="user_login")
      * @param Request $request
      * @return \FOS\RestBundle\View\View
      */
     public function login(Request $request)
     {
-        $user = $this->userRepository->findOneBy(['email'=> $request->request->get('Email')]);
-        if (!$user && ($user->getPassword() !== $request->request->get('Password'))) return $this->error;
+        $user = $this->userRepository->findOneBy(['email' => $request->request->get('Email'),'password' => $request->request->get('Password')]);
+        if (!$user) return $this->error;
 
         return View::create(['token' => $user->getToken()], Response::HTTP_OK);
     }
 
     /**
-     * refresh token.
+     * Refresh user token.
      * @Rest\Post("/api/refreshToken", name="user_refresh_token")
      * @param Request $request
      * @return \FOS\RestBundle\View\View
@@ -90,7 +90,7 @@ class UserController extends Controller
     }
 
     /**
-     * get location.
+     * Get location.
      * @Rest\Get("/api/getLocation/{token}", name="user_get_location")
      * @param string $token
      * @return \FOS\RestBundle\View\View
@@ -106,7 +106,7 @@ class UserController extends Controller
 
 
     /**
-     * check in.
+     * Sign a user to an event.
      * @Rest\Post("/api/checkIn", name="checkIn")
      * @param Request $request
      * @return \FOS\RestBundle\View\View
